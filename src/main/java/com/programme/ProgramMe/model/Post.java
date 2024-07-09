@@ -1,5 +1,6 @@
 package com.programme.ProgramMe.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +14,7 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "author_id")
+    @JsonBackReference
     private Programmer author;
 
     public Post() {
