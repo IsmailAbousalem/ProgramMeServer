@@ -1,9 +1,12 @@
 package com.programme.ProgramMe.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
-@Entity
+import java.util.Date;
+
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,11 +14,11 @@ public class Post {
     private String title;
     private String description;
     private Double price;
+    private Date date;
 
     @ManyToOne
-    @JoinColumn(name = "author_id")
-    @JsonBackReference
-    private Programmer author;
+    private Programmer programmer;
+
 
     public Post() {
     }
@@ -52,11 +55,20 @@ public class Post {
         this.price = price;
     }
 
-    public Programmer getAuthor() {
-        return author;
+    public Date getDate() {
+        return date;
     }
 
-    public void setAuthor(Programmer author) {
-        this.author = author;
+    public void setDate(Date date) {
+        this.date = date;
     }
+
+    public Programmer getProgrammer() {
+        return programmer;
+    }
+
+    public void setProgrammer(Programmer programmer) {
+        this.programmer = programmer;
+    }
+    // Getters and setters
 }

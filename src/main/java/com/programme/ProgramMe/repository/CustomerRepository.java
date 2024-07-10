@@ -1,4 +1,4 @@
 package com.programme.ProgramMe.repository;
 
-public interface PostRepository {
+public interface CustomerRepository {
 }
