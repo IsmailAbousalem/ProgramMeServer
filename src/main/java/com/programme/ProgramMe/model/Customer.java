@@ -1,7 +1,6 @@
 package com.programme.ProgramMe.model;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)

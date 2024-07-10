@@ -1,12 +1,10 @@
 package com.programme.ProgramMe.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
+@Entity
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +15,7 @@ public class Post {
     private Date date;
 
     @ManyToOne
+    @JoinColumn(name = "programmer_id")
     private Programmer programmer;
 
 
