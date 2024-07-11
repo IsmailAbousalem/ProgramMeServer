@@ -4,18 +4,16 @@ import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
-@DiscriminatorValue("User")
-public class User {
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String phoneNumber;
+    private String number;
     private String email;
     private String password;
 
-    public User() {
+    public Customer() {
     }
 
     public Long getId() {
@@ -34,12 +32,12 @@ public class User {
         this.name = name;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getNumber() {
+        return number;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public String getEmail() {
@@ -57,4 +55,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    // Getters and setters
 }

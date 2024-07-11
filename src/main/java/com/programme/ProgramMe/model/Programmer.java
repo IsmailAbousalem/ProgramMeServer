@@ -1,28 +1,31 @@
 package com.programme.ProgramMe.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-
-import java.util.List;
 
 @Entity
-@DiscriminatorValue("Programmer")
-public class Programmer extends User{
-    @OneToMany(mappedBy = "author")
-    @JsonManagedReference
-    private List<Post> posts;
+public class Programmer extends Customer {
+    private String skills;
+    private String description;
+
 
     public Programmer() {
     }
 
-    public List<Post> getPosts() {
-        return posts;
+    public String getSkills() {
+        return skills;
     }
 
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
+    public void setSkills(String skills) {
+        this.skills = skills;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+
 }

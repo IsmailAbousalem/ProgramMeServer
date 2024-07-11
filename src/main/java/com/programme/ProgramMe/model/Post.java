@@ -1,7 +1,8 @@
 package com.programme.ProgramMe.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+
+import java.util.Date;
 
 @Entity
 public class Post {
@@ -11,11 +12,12 @@ public class Post {
     private String title;
     private String description;
     private Double price;
+    private Date date;
 
     @ManyToOne
-    @JoinColumn(name = "author_id")
-    @JsonBackReference
-    private Programmer author;
+    @JoinColumn(name = "programmer_id")
+    private Programmer programmer;
+
 
     public Post() {
     }
@@ -52,11 +54,20 @@ public class Post {
         this.price = price;
     }
 
-    public Programmer getAuthor() {
-        return author;
+    public Date getDate() {
+        return date;
     }
 
-    public void setAuthor(Programmer author) {
-        this.author = author;
+    public void setDate(Date date) {
+        this.date = date;
     }
+
+    public Programmer getProgrammer() {
+        return programmer;
+    }
+
+    public void setProgrammer(Programmer programmer) {
+        this.programmer = programmer;
+    }
+    // Getters and setters
 }
