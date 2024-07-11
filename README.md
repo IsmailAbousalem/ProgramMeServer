@@ -86,8 +86,8 @@ Tools:
 
 **Extra Links**
 
+- Google Slides Presentation: https://docs.google.com/presentation/d/1UUmu5plor5oJhyJZKAHubgjhPZFoMX_h7Rxs_jRRpC0/edit?usp=sharing
 - LucidChart (For UML Diagram)
-- PowerPoint (For Presentation)
 
 --------
 
