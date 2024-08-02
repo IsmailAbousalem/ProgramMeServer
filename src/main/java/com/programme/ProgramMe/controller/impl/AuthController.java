@@ -9,6 +9,7 @@ import com.programme.ProgramMe.model.Programmer;
 import com.programme.ProgramMe.repository.CustomerRepository;
 import com.programme.ProgramMe.repository.ProgrammerRepository;
 import com.programme.ProgramMe.model.SignupRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,7 @@ public class AuthController {
     private ProgrammerRepository programmerRepository;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest signupRequest) {
         if ("programmer".equalsIgnoreCase(signupRequest.getUserType())) {
             if (programmerRepository.findByEmail(signupRequest.getEmail()) != null) {
                 return ResponseEntity.badRequest().body("Programmer already exists");
