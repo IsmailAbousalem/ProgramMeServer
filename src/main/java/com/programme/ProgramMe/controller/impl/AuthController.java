@@ -5,7 +5,10 @@ import com.programme.ProgramMe.config.UserDetailsServiceImpl;
 import com.programme.ProgramMe.model.AuthenticationRequest;
 import com.programme.ProgramMe.model.AuthenticationResponse;
 import com.programme.ProgramMe.model.Customer;
+import com.programme.ProgramMe.model.Programmer;
 import com.programme.ProgramMe.repository.CustomerRepository;
+import com.programme.ProgramMe.repository.ProgrammerRepository;
+import com.programme.ProgramMe.model.SignupRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,14 +38,36 @@ public class AuthController {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private ProgrammerRepository programmerRepository;
+
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody Customer customer) {
-        if (customerRepository.findByEmail(customer.getEmail()) != null) {
-            return ResponseEntity.badRequest().body("Customer already exists");
+    public ResponseEntity<?> signup(@RequestBody SignupRequest signupRequest) {
+        if ("programmer".equalsIgnoreCase(signupRequest.getUserType())) {
+            if (programmerRepository.findByEmail(signupRequest.getEmail()) != null) {
+                return ResponseEntity.badRequest().body("Programmer already exists");
+            }
+            Programmer programmer = new Programmer();
+            programmer.setName(signupRequest.getName());
+            programmer.setEmail(signupRequest.getEmail());
+            programmer.setNumber(signupRequest.getNumber());
+            programmer.setPassword(new BCryptPasswordEncoder().encode(signupRequest.getPassword()));
+            programmer.setSkills(signupRequest.getSkills());
+            programmer.setDescription(signupRequest.getDescription());
+            programmerRepository.save(programmer);
+            return ResponseEntity.ok(programmer);
+        } else {
+            if (customerRepository.findByEmail(signupRequest.getEmail()) != null) {
+                return ResponseEntity.badRequest().body("Customer already exists");
+            }
+            Customer customer = new Customer();
+            customer.setName(signupRequest.getName());
+            customer.setEmail(signupRequest.getEmail());
+            customer.setNumber(signupRequest.getNumber());
+            customer.setPassword(new BCryptPasswordEncoder().encode(signupRequest.getPassword()));
+            customerRepository.save(customer);
+            return ResponseEntity.ok(customer);
         }
-        customer.setPassword(new BCryptPasswordEncoder().encode(customer.getPassword()));
-        customerRepository.save(customer);
-        return ResponseEntity.ok(customer);
     }
 
     @PostMapping("/login")

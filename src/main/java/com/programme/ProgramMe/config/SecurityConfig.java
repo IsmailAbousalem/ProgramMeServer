@@ -53,6 +53,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/signup", "/auth/login").permitAll()
+                        .requestMatchers("/posts/**").authenticated() // Ensure only authenticated users can access /posts
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
@@ -65,6 +66,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
     @Bean
     public JwtRequestFilter jwtRequestFilter() {
