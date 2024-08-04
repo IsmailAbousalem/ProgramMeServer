@@ -42,6 +42,9 @@ public class AuthController {
     @Autowired
     private ProgrammerRepository programmerRepository;
 
+//    ProgramMe
+//    Play on word Programme
+
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest signupRequest) {
         if ("programmer".equalsIgnoreCase(signupRequest.getUserType())) {

@@ -4,6 +4,7 @@ import com.programme.ProgramMe.config.JwtRequestFilter;
 import com.programme.ProgramMe.config.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -52,9 +53,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/signup", "/auth/login").permitAll()
-                        .requestMatchers("/posts/**").authenticated() // Ensure only authenticated users can access /posts
-                        .anyRequest().authenticated()
+                        .requestMatchers("/auth/signup", "/auth/login").permitAll() // Public access for auth routes
+                        .requestMatchers(HttpMethod.GET, "/posts").permitAll() // Public access for GET /posts
+                        .requestMatchers(HttpMethod.GET, "/posts/**").permitAll() // Public access for GET /posts/{id}
+                        .requestMatchers(HttpMethod.POST, "/posts").authenticated() // Only authenticated users can create posts
+                        .anyRequest().authenticated() // All other routes require authentication
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -67,9 +70,9 @@ public class SecurityConfig {
         return http.build();
     }
 
-
     @Bean
     public JwtRequestFilter jwtRequestFilter() {
         return new JwtRequestFilter();
     }
 }
+

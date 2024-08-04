@@ -28,6 +28,15 @@ public class PostController {
         return postService.getAllPosts();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Post> getPostById(@PathVariable Long id) {
+        Post post = postService.getPostById(id);
+        if (post == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(post, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<?> createPost(@RequestBody Post post) {
         // Get the authenticated user
@@ -45,3 +54,4 @@ public class PostController {
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
 }
+
