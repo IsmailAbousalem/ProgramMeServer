@@ -58,6 +58,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/posts/**").permitAll() // Public access for GET /posts/{id}
                         .requestMatchers(HttpMethod.POST, "/posts").authenticated() // Only authenticated users can create posts
                         .requestMatchers(HttpMethod.GET, "/programmers").permitAll() // Public access for GET /programmers
+                        .requestMatchers(HttpMethod.GET, "/programmers/**").permitAll() // Public access for GET /programmers by their ID
+                        .requestMatchers(HttpMethod.GET, "/customers").permitAll() // Public access for GET /customers
+                        .requestMatchers(HttpMethod.GET, "/customers/**").permitAll() // Public access for GET /customers by their ID
                         .anyRequest().authenticated() // All other routes require authentication
                 )
                 .sessionManagement(session -> session
