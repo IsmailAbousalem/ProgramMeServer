@@ -29,4 +29,6 @@ public class PostDTO {
         this.programmerName = post.getProgrammer().getName();
         this.programmerDescription = post.getProgrammer().getDescription();
     }
+
+    // Getters and setters
 }
