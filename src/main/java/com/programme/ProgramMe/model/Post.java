@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
@@ -18,6 +19,9 @@ public class Post {
     private String title;
     private String description;
     private Double price;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
     @ManyToOne

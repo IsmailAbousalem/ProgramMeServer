@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,6 +51,19 @@ public class ProgrammerController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProgrammer(@PathVariable Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+
+        Programmer programmer = programmerService.getProgrammerById(id);
+        if (programmer == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        // Check if the authenticated programmer is trying to delete their own account
+        if (!programmer.getEmail().equals(userEmail)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN); // Return 403 Forbidden if they try to delete another programmer's account
+        }
+
         programmerService.deleteProgrammer(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

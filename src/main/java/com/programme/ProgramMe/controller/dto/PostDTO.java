@@ -17,6 +17,7 @@ public class PostDTO {
     private String description;
     private Double price;
     private Date date;
+    private Long programmerId;
     private String programmerName;
     private String programmerDescription;
 
@@ -26,6 +27,7 @@ public class PostDTO {
         this.description = post.getDescription();
         this.price = post.getPrice();
         this.date = post.getDate();
+        this.programmerId = post.getProgrammer().getId();
         this.programmerName = post.getProgrammer().getName();
         this.programmerDescription = post.getProgrammer().getDescription();
     }

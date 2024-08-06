@@ -55,5 +55,46 @@ public class PostController {
         Post createdPost = postService.createPost(post);
         return new ResponseEntity<>(new PostDTO(createdPost), HttpStatus.CREATED);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePost(@PathVariable Long id, @RequestBody Post postDetails) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+
+        // Get the post to be updated
+        Post post = postService.getPostById(id);
+        if (post == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        // Ensure only the programmer who created the post can update it
+        if (!post.getProgrammer().getEmail().equals(userEmail)) {
+            return new ResponseEntity<>("You can only update your own posts", HttpStatus.FORBIDDEN);
+        }
+
+        // Update the post details
+        post.setTitle(postDetails.getTitle());
+        post.setDescription(postDetails.getDescription());
+        post.setPrice(postDetails.getPrice());
+        post.setDate(postDetails.getDate());
+
+        Post updatedPost = postService.updatePost(id, post);
+        return new ResponseEntity<>(new PostDTO(updatedPost), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePost(@PathVariable Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+
+        // Check if the programmer deleting the post is the one who created it
+        Post post = postService.getPostById(id);
+        if (!post.getProgrammer().getEmail().equals(userEmail)) {
+            return new ResponseEntity<>("You can only delete your own posts", HttpStatus.FORBIDDEN);
+        }
+
+        postService.deletePost(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
 
