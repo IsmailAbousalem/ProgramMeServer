@@ -97,11 +97,14 @@ public class AuthController {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails);
 
-        // Get the user type
+        // Get the user type, email, and ID
         String userType = userDetailsService.getUserType(authenticationRequest.getEmail());
+        String email = authenticationRequest.getEmail();
+        Long userId = userDetailsService.getUserIdByEmail(email); // Implement this method to get user ID
 
-        return ResponseEntity.ok(new AuthenticationResponse(jwt, userType));
+        return ResponseEntity.ok(new AuthenticationResponse(jwt, userType, email, userId));
     }
+
 
     @GetMapping("/verify")
     public ResponseEntity<?> verifyToken(HttpServletRequest request) {

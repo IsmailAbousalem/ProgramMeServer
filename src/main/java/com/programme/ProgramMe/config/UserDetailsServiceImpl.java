@@ -47,5 +47,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("User not found with email: " + email);
         }
     }
+
+    public Long getUserIdByEmail(String email) {
+        if (programmerRepository.findByEmail(email) != null) {
+            return programmerRepository.findByEmail(email).getId();
+        } else if (customerRepository.findByEmail(email) != null) {
+            return customerRepository.findByEmail(email).getId();
+        } else {
+            return null; // Handle case where the email is not found
+        }
+    }
+
 }
 

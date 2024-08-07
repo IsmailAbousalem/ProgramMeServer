@@ -76,11 +76,17 @@ public class PostController {
         post.setTitle(postDetails.getTitle());
         post.setDescription(postDetails.getDescription());
         post.setPrice(postDetails.getPrice());
-        post.setDate(postDetails.getDate());
+
+        // Keep the existing date if no new date is provided
+        if (postDetails.getDate() != null) {
+            post.setDate(postDetails.getDate());
+        }
 
         Post updatedPost = postService.updatePost(id, post);
         return new ResponseEntity<>(new PostDTO(updatedPost), HttpStatus.OK);
     }
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePost(@PathVariable Long id) {

@@ -20,6 +20,7 @@ public class PostDTO {
     private Long programmerId;
     private String programmerName;
     private String programmerDescription;
+    private String programmerEmail;
 
     public PostDTO(Post post) {
         this.id = post.getId();
@@ -30,6 +31,7 @@ public class PostDTO {
         this.programmerId = post.getProgrammer().getId();
         this.programmerName = post.getProgrammer().getName();
         this.programmerDescription = post.getProgrammer().getDescription();
+        this.programmerEmail = post.getProgrammer().getEmail();
     }
 
     // Getters and setters
