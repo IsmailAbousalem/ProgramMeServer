@@ -6,6 +6,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,12 +36,30 @@ public class CustomerController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @Valid @RequestBody Customer customerDetails) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserEmail = authentication.getName();
+
+        // Check if the authenticated user is the owner of the account
+        Customer customer = customerService.getCustomerById(id);
+        if (!customer.getEmail().equals(currentUserEmail)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         Customer updatedCustomer = customerService.updateCustomer(id, customerDetails);
         return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserEmail = authentication.getName();
+
+        // Check if the authenticated user is the owner of the account
+        Customer customer = customerService.getCustomerById(id);
+        if (!customer.getEmail().equals(currentUserEmail)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         customerService.deleteCustomer(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

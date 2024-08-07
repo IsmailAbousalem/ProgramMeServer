@@ -37,5 +37,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         throw new UsernameNotFoundException("User not found");
     }
+
+    public String getUserType(String email) {
+        if (programmerRepository.findByEmail(email) != null) {
+            return "programmer";
+        } else if (customerRepository.findByEmail(email) != null) {
+            return "customer";
+        } else {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+    }
 }
 
