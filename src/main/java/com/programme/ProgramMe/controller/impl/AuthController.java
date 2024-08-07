@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -42,12 +43,21 @@ public class AuthController {
     @Autowired
     private ProgrammerRepository programmerRepository;
 
-//    ProgramMe
-//    Play on word Programme
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest signupRequest) {
-        if ("programmer".equalsIgnoreCase(signupRequest.getUserType())) {
+        // Automatically determine user type based on provided fields
+        String userType = signupRequest.getUserType();
+
+        if (userType == null) {
+            if (signupRequest.getSkills() != null && signupRequest.getDescription() != null) {
+                userType = "programmer";
+            } else {
+                userType = "customer";
+            }
+        }
+
+        if ("programmer".equalsIgnoreCase(userType)) {
             if (programmerRepository.findByEmail(signupRequest.getEmail()) != null) {
                 return ResponseEntity.badRequest().body("Programmer already exists");
             }
@@ -87,7 +97,10 @@ public class AuthController {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails);
 
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+        // Get the user type
+        String userType = userDetailsService.getUserType(authenticationRequest.getEmail());
+
+        return ResponseEntity.ok(new AuthenticationResponse(jwt, userType));
     }
 
     @GetMapping("/verify")
