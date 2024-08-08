@@ -1,7 +1,5 @@
 package com.programme.ProgramMe.config;
 
-import com.programme.ProgramMe.config.JwtRequestFilter;
-import com.programme.ProgramMe.config.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -10,7 +8,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -20,6 +17,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import com.programme.ProgramMe.config.JwtRequestFilter;
+
 
 @Configuration
 @EnableWebSecurity
@@ -52,16 +53,26 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors // Enable CORS
+                        .configurationSource(request -> {
+                            var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
+                            corsConfiguration.addAllowedOrigin("http://localhost:5173"); // Specific origin
+                            corsConfiguration.addAllowedMethod("*");
+                            corsConfiguration.addAllowedHeader("*");
+                            corsConfiguration.setAllowCredentials(true);
+                            return corsConfiguration;
+                        })
+                )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/signup", "/auth/login").permitAll() // Public access for auth routes
-                        .requestMatchers(HttpMethod.GET, "/posts").permitAll() // Public access for GET /posts
-                        .requestMatchers(HttpMethod.GET, "/posts/**").permitAll() // Public access for GET /posts/{id}
-                        .requestMatchers(HttpMethod.POST, "/posts").authenticated() // Only authenticated users can create posts
-                        .requestMatchers(HttpMethod.GET, "/programmers").permitAll() // Public access for GET /programmers
-                        .requestMatchers(HttpMethod.GET, "/programmers/**").permitAll() // Public access for GET /programmers by their ID
-                        .requestMatchers(HttpMethod.GET, "/customers").permitAll() // Public access for GET /customers
-                        .requestMatchers(HttpMethod.GET, "/customers/**").permitAll() // Public access for GET /customers by their ID
-                        .anyRequest().authenticated() // All other routes require authentication
+                        .requestMatchers("/auth/signup", "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/posts").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/posts/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/posts").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/programmers").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/programmers/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/customers").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/customers/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -79,4 +90,5 @@ public class SecurityConfig {
         return new JwtRequestFilter();
     }
 }
+
 

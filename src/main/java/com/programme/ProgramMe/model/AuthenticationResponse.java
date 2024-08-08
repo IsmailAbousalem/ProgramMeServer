@@ -5,12 +5,14 @@ public class AuthenticationResponse {
     private final String userType;
     private final String email;
     private final Long userId;
+    private final String userName;
 
-    public AuthenticationResponse(String jwt, String userType, String email, Long userId) {
+    public AuthenticationResponse(String jwt, String userType, String email, Long userId, String userName) {
         this.jwt = jwt;
         this.userType = userType;
         this.email = email;
         this.userId = userId;
+        this.userName = userName;
     }
 
     public String getJwt() {
@@ -27,6 +29,10 @@ public class AuthenticationResponse {
 
     public Long getUserId() {
         return userId;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 }
 

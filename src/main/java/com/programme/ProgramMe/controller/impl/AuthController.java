@@ -87,23 +87,26 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         try {
+            System.out.println("Attempting authentication for user: " + authenticationRequest.getEmail());
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword())
             );
         } catch (BadCredentialsException e) {
+            System.out.println("Failed authentication for user: " + authenticationRequest.getEmail());
             throw new Exception("Incorrect email or password", e);
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails);
 
-        // Get the user type, email, and ID
-        String userType = userDetailsService.getUserType(authenticationRequest.getEmail());
-        String email = authenticationRequest.getEmail();
-        Long userId = userDetailsService.getUserIdByEmail(email); // Implement this method to get user ID
+        Programmer programmer = programmerRepository.findByEmail(authenticationRequest.getEmail());
+        String userName = programmer != null ? programmer.getName() : "N/A";
+        Long userId = programmer != null ? programmer.getId() : null;
 
-        return ResponseEntity.ok(new AuthenticationResponse(jwt, userType, email, userId));
+        return ResponseEntity.ok(new AuthenticationResponse(jwt, userDetailsService.getUserType(authenticationRequest.getEmail()), authenticationRequest.getEmail(), userId, userName));
     }
+
+
 
 
     @GetMapping("/verify")
