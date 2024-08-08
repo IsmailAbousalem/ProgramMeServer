@@ -16,6 +16,7 @@ public class ProgrammerDTO {
     private Long id;
     private String name;
     private String email;
+    private String number;
     private String skills;
     private String description;
     private List<PostDTO> posts;
@@ -24,6 +25,7 @@ public class ProgrammerDTO {
         this.id = programmer.getId();
         this.name = programmer.getName();
         this.email = programmer.getEmail();
+        this.number = programmer.getNumber();
         this.skills = programmer.getSkills();
         this.description = programmer.getDescription();
         this.posts = programmer.getPosts().stream()

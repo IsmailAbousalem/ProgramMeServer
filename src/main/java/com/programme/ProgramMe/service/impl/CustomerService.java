@@ -4,6 +4,7 @@ import com.programme.ProgramMe.model.Customer;
 import com.programme.ProgramMe.model.Programmer;
 import com.programme.ProgramMe.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +17,9 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll()
                 .stream()
@@ -26,8 +30,6 @@ public class CustomerService {
 
     public Customer getCustomerById(Long id) {
         return customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found"));
-
-//                new ResourceNotFoundException("Customer not found"));
     }
 
 
@@ -37,10 +39,21 @@ public class CustomerService {
 
     public Customer updateCustomer(Long id, Customer customerDetails) {
         Customer customer = getCustomerById(id);
-        customer.setEmail(customerDetails.getEmail());
-        customer.setName(customerDetails.getName());
-        customer.setNumber(customerDetails.getNumber());
-        customer.setPassword(customerDetails.getPassword());
+
+        if (customerDetails.getEmail() != null) {
+            customer.setEmail(customerDetails.getEmail());
+        }
+        if (customerDetails.getName() != null) {
+            customer.setName(customerDetails.getName());
+        }
+        if (customerDetails.getNumber() != null) {
+            customer.setNumber(customerDetails.getNumber());
+        }
+        if (customerDetails.getPassword() != null && !customerDetails.getPassword().isEmpty()) {
+            // Encrypt the password before saving
+            customer.setPassword(passwordEncoder.encode(customerDetails.getPassword()));
+        }
+
         return customerRepository.save(customer);
     }
 
