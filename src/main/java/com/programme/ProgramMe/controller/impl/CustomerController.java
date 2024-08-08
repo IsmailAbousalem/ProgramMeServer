@@ -1,6 +1,8 @@
 package com.programme.ProgramMe.controller.impl;
 
 import com.programme.ProgramMe.model.Customer;
+import com.programme.ProgramMe.repository.OnCreate;
+import com.programme.ProgramMe.repository.OnUpdate;
 import com.programme.ProgramMe.service.impl.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
@@ -29,17 +32,17 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@Valid @RequestBody Customer customer) {
+    public ResponseEntity<Customer> createCustomer(@Validated(OnCreate.class) @RequestBody Customer customer) {
         Customer createdCustomer = customerService.createCustomer(customer);
         return new ResponseEntity<>(createdCustomer, HttpStatus.CREATED);
     }
 
+    // In CustomerController
     @PutMapping("/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @Valid @RequestBody Customer customerDetails) {
+    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @Validated(OnUpdate.class) @RequestBody Customer customerDetails) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserEmail = authentication.getName();
 
-        // Check if the authenticated user is the owner of the account
         Customer customer = customerService.getCustomerById(id);
         if (!customer.getEmail().equals(currentUserEmail)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -54,7 +57,6 @@ public class CustomerController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserEmail = authentication.getName();
 
-        // Check if the authenticated user is the owner of the account
         Customer customer = customerService.getCustomerById(id);
         if (!customer.getEmail().equals(currentUserEmail)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);

@@ -3,6 +3,7 @@ package com.programme.ProgramMe.service.impl;
 import com.programme.ProgramMe.model.Programmer;
 import com.programme.ProgramMe.repository.ProgrammerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +12,9 @@ import java.util.List;
 public class ProgrammerService {
     @Autowired
     private ProgrammerRepository programmerRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     public List<Programmer> getAllProgrammers() {
         return programmerRepository.findAll();
@@ -26,14 +30,30 @@ public class ProgrammerService {
 
     public Programmer updateProgrammer(Long id, Programmer programmerDetails) {
         Programmer programmer = getProgrammerById(id);
-        programmer.setEmail(programmerDetails.getEmail());
-        programmer.setName(programmerDetails.getName());
-        programmer.setNumber(programmerDetails.getNumber());
-        programmer.setPassword(programmerDetails.getPassword());
-        programmer.setDescription(programmerDetails.getDescription());
-        programmer.setSkills(programmerDetails.getSkills());
+
+        if (programmerDetails.getEmail() != null) {
+            programmer.setEmail(programmerDetails.getEmail());
+        }
+        if (programmerDetails.getName() != null) {
+            programmer.setName(programmerDetails.getName());
+        }
+        if (programmerDetails.getNumber() != null) {
+            programmer.setNumber(programmerDetails.getNumber());
+        }
+        if (programmerDetails.getPassword() != null && !programmerDetails.getPassword().isEmpty()) {
+            // Encrypt the password before saving
+            programmer.setPassword(passwordEncoder.encode(programmerDetails.getPassword()));
+        }
+        if (programmerDetails.getDescription() != null) {
+            programmer.setDescription(programmerDetails.getDescription());
+        }
+        if (programmerDetails.getSkills() != null) {
+            programmer.setSkills(programmerDetails.getSkills());
+        }
+
         return programmerRepository.save(programmer);
     }
+
 
     public void deleteProgrammer(Long id) {
         Programmer programmer = getProgrammerById(id);
