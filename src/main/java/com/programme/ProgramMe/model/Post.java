@@ -16,8 +16,12 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String title;
+
+    @Column(columnDefinition = "TEXT")  // Or @Column(length = 65535) for VARCHAR
     private String description;
+
     private Double price;
 
     @CreationTimestamp
