@@ -1,20 +1,15 @@
+# Exported from Render on 2024-09-07T03:08:42Z
 services:
   - type: web
-    name: ProgramMeBackend
-#    env: java
+    name: ProgramMeServer
+    runtime: node
+    repo: https://github.com/IsmailAbousalem/ProgramMeServer
+    branch: postgreSQL
     plan: free
-    buildCommand: "./mvnw clean install"
-    startCommand: "./mvnw spring-boot:run"
     envVars:
-      - key: DB_HOST
-        value: "dpg-crdrk3rgbbvc73d5st00-a.virginia-postgres.render.com"
-      - key: DB_PORT
-        value: "5432"
-      - key: DB_NAME
-        value: "programmedb"
-      - key: DB_USER
-        value: "programmedb_user"
-      - key: DB_PASSWORD
-        value: "NXIG9jKKDLOUC3q0yblisrJXhBvxGxRx"
       - key: JAVA_HOME
-        value: "/opt/render/project/.java/jdk"
+        sync: false
+    region: virginia
+    buildCommand: ./mvnw clean install -DskipTests
+    startCommand: ./mvnw spring-boot:run
+version: "1"
