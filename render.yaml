@@ -6,5 +6,15 @@ services:
     buildCommand: "./mvnw clean install"
     startCommand: "./mvnw spring-boot:run"
     envVars:
-      - key: DATABASE_URL
-        value: "your_database_url_here" # Set this to your Render MySQL database URL
+      - key: DB_HOST
+        value: "dpg-crdrk3rgbbvc73d5st00-a.virginia-postgres.render.com"
+      - key: DB_PORT
+        value: "5432"
+      - key: DB_NAME
+        value: "programmedb"
+      - key: DB_USER
+        value: "programmedb_user"
+      - key: DB_PASSWORD
+        value: "NXIG9jKKDLOUC3q0yblisrJXhBvxGxRx"
+      - key: JAVA_HOME
+        value: "/opt/render/project/.render/buildpacks/java"
