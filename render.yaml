@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: ProgramMeBackend
+    env: java
+    plan: free
+    buildCommand: "./mvnw clean install"
+    startCommand: "./mvnw spring-boot:run"
+    envVars:
+      - key: DATABASE_URL
+        value: "your_database_url_here" # Set this to your Render MySQL database URL
