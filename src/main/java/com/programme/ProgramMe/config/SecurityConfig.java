@@ -21,6 +21,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.programme.ProgramMe.config.JwtRequestFilter;
 
+import java.util.Arrays;
+
 
 @Configuration
 @EnableWebSecurity
@@ -56,7 +58,7 @@ public class SecurityConfig {
                 .cors(cors -> cors // Enable CORS
                         .configurationSource(request -> {
                             var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
-                            corsConfiguration.addAllowedOrigin("https://programmedev.netlify.app/"); // Specific origin
+                            corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "https://programmedev.netlify.app"));
                             corsConfiguration.addAllowedMethod("*");
                             corsConfiguration.addAllowedHeader("*");
                             corsConfiguration.setAllowCredentials(true);
