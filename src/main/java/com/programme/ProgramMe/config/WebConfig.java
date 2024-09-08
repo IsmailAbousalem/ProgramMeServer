@@ -9,8 +9,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+//        THIS COULD BE REMOVED AS IT IS REDUNDANT, SPRING SECURITY'S CORS POLICY TAKES PRECEDENCE AND WILL OVERRIDE THIS ANYWAY
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5173") // Use the correct frontend URL
+                .allowedOrigins("https://programmedev.netlify.app/") // Use the correct frontend URL
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);

@@ -56,7 +56,7 @@ public class SecurityConfig {
                 .cors(cors -> cors // Enable CORS
                         .configurationSource(request -> {
                             var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
-                            corsConfiguration.addAllowedOrigin("http://localhost:5173"); // Specific origin
+                            corsConfiguration.addAllowedOrigin("https://programmedev.netlify.app/"); // Specific origin
                             corsConfiguration.addAllowedMethod("*");
                             corsConfiguration.addAllowedHeader("*");
                             corsConfiguration.setAllowCredentials(true);
