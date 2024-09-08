@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost:5173", "https://programmedev.netlify.app"})
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
